@@ -31,7 +31,7 @@ def login():
             error = 'Invalid credentials'
     
     
-    return render_template('login.html')
+    return render_template('login.html', error=error)
         
 #after successful login the user is redirected to the news feed
 @app.route('/home', methods=['GET'])
