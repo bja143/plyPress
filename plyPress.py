@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
 from flask.templating import render_template
 
 
@@ -26,7 +26,9 @@ def login():
     error = None
     if request.method=='POST':
         if valid_login(request.form['username'], request.form['password']):
-            return 
+            return redirect(url_for('home'))
+        else:
+            error = 'Invalid credentials'
     
     
     return render_template('login.html')
