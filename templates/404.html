@@ -1,18 +1,29 @@
-<html>
+<!DOCTYPE html>
+<meta charset=UTF-8” />
 <head>
 <title>Page not found</title>
 <style>
-body{
-	font-size:16px;
-	
-	}
+	body{
+		text-align:center;
+		font-size: 37px;
+		}
+.error{
+	width:300px;
+    height:50px;
+	position:absolute;
+     z-index:25;
+     top:50%;
+     left:50%;
+     margin:-100px 0 0 -150px;
+	background-color: rgba(0, 0, 0, 0.05);
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
 </style>
 </head>
+
 <body>
-<p> Unfortunately the page you were looking for isn't there. You can do either of the following: </p>
-<ul>
-<li>1. If you entered the link manually, check your links</li>
-<li>2. Contact the blog admin</li>
+<p class="error">The link is broken.</p>
 </ul>
 </body>
 </html>
