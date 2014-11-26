@@ -1,0 +1,14 @@
+a {
+text-decoration: none;
+color: black;
+}
+
+#banner {
+width: auto;
+height: 50px;
+display: block;
+border-bottom: 1px solid #ccc;
+box-shadow: 0 4px 4px rgba(0,0,0,.06);
+text-align: center;
+font-family: monospace;
+}
