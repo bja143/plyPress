@@ -7,16 +7,17 @@ app = Flask('flyPress')
 #when the application is run for the first time it has to set up files on the system
 #this is the function used to do so
 
-@app.route('/install', methods=['GET', 'POST'])
-def install_flyPress():
-    if request.method == 'POST':
-        pass
-    else:
-        render_template("installer.html")
+#implement the installer later
+
+# @app.route('/install', methods=['GET', 'POST'])
+# def install_flyPress():
+#     if request.method == 'POST':
+#         pass
+#     else:
+#         render_template("installer.html")
 
 #when the user logs into the system this method is executed
 @app.route('/login', methods=['GET', 'POST'])
-
 
 def valid_login(username, password):
     pass
@@ -32,7 +33,7 @@ def login():
     
     
     return render_template('login.html', error=error)
-        
+
 #after successful login the user is redirected to the news feed
 @app.route('/home', methods=['GET'])
 def show_feed():
