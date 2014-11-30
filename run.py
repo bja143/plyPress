@@ -1,6 +1,8 @@
 from flask import Flask
+import config
 import models
 import views
+
 
 #create the application
 app = Flask(__name__)
