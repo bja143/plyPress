@@ -3,8 +3,7 @@ use plypress;
 
 --create table user_master
 --(
---    email_id varchar(40) not null primary key,
---    fullname Varchar(15) not null, 
+--    email_id varchar(40) not null primary key, 
 --    password char(255) not null,
 --    full_name varchar(100) not null
 --); 
@@ -14,8 +13,10 @@ create table post_master
 (
     post_id integer primary key, 
     post_title varchar(100) not null, 
+    post_subtitle varchar(100) not null,
     post_content text not null,
-    posted_on datetime  not null
+    posted_on datetime  not null,
+    post_author varchar(100) not null
 );
 
 --create table comments(

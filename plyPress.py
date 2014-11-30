@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, url_for, render_template, session
 from config import *
+from models import fetch_posts, insert_post, fetch_post_by_id
 
 #create the application
 app = Flask(__name__)
-
 app.config.from_object(__name__)
 
 #implement the installer later
@@ -34,18 +36,42 @@ def valid_login(username, password):
         return True
     else:
         return False
+    
+posts= [] # get all posts from db
+
+post_content={ }
 
 #after successful login the user is redirected to the news feed
 @app.route("/")
 @app.route('/home', methods=['GET'])
 def show_feed():
     #get data from dbms
-    return render_template("index.html", title=TITLE)
+    posts = fetch_posts()
+    return render_template("index.html", title=TITLE, posts=posts)
 
 #invoked while adding a new post
-@app.route('/new', methods=['GET'])
+@app.route('/new', methods=['GET', 'POST'])
 def new_post():
-    return render_template('post.html')
+    if request.method=='GET':
+        return render_template('post.html')
+    else:
+        title= request.form['title']
+        subtitle= request.form['subtitle']
+        text= request.form['text']
+        username = USERNAME
+        from datetime import date
+        to = date.today()
+        date=to.strftime("%B %d %Y")
+        
+        post = {
+                'title':title, 'subtitle':subtitle, 'text':text,
+                'date':date, 'username':username              
+                }
+        
+        insert_post(post)
+        
+        render_template('post.html', post=post)
+        
 
 @app.route('/contact', methods=['GET'])
 def contact():
@@ -55,16 +81,14 @@ def contact():
 def about():
     return render_template("about.html", title=TITLE)
 
-@app.route('/dashboard', methods=['GET'])
-def dashboard():
-    return render_template("dashboard.html")
+# @app.route('/dashboard', methods=['GET'])
+# def dashboard():
+#     return render_template("dashboard.html")
 
-@app.route("/post/<postid>")
-def show_post(postid=None):
-    if postid==None:
-        return render_template("404.html", 404)
-    
-    return render_template("show_post.html")
+@app.route('/post/<postid>')
+def show_post(postid):
+    post_content = fetch_post_by_id(postid)
+    return render_template("show_post.html",post=post_content)
 
 if __name__=='__main__':
     app.run(debug=True)
