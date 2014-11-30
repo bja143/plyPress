@@ -1,14 +1,17 @@
-from flask import Flask, request, redirect, url_for, render_template, session
+from flask import Flask, request, url_for, render_template, session
 
 
 #create the application
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+
 DATABASE = ''
 DEBUG = True
-SECRET_KEY = 'development key'
+SECRET_KEY = 'developmentkey'
 USERNAME = 'admin'
 PASSWORD = 'default'
+TITLE="MyTechbook"
 
 #when the application is run for the first time it has to set up files on the system
 #this is the function used to do so
@@ -28,11 +31,13 @@ def login():
     error = None
     if request.method=='POST':
         if valid_login(request.form['username'], request.form['password']):
-            return redirect(url_for('home'))
+            session['logged_in'] = True
+            return render_template("dashboard.html")
         else:
             error = 'Invalid credentials'
-   
-    return render_template('login.html', error=error)
+            return render_template('dashboard.html', error=error)
+    else:
+        return render_template('login.html')
 
 def valid_login(username, password):
     if username== USERNAME and password==PASSWORD:
