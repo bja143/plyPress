@@ -1,8 +1,14 @@
-from flask import Flask, request, redirect, url_for
-from flask.templating import render_template
+from flask import Flask, request, redirect, url_for, render_template, session
 
 
-app = Flask('flyPress')
+#create the application
+app = Flask(__name__)
+app.config.from_object(__name__)
+DATABASE = ''
+DEBUG = True
+SECRET_KEY = 'development key'
+USERNAME = 'admin'
+PASSWORD = 'default'
 
 #when the application is run for the first time it has to set up files on the system
 #this is the function used to do so
@@ -18,11 +24,6 @@ app = Flask('flyPress')
 
 #when the user logs into the system this method is executed
 @app.route('/login', methods=['GET', 'POST'])
-
-def valid_login(username, password):
-    pass
-
-
 def login():
     error = None
     if request.method=='POST':
@@ -30,21 +31,46 @@ def login():
             return redirect(url_for('home'))
         else:
             error = 'Invalid credentials'
-    
-    
+   
     return render_template('login.html', error=error)
 
+def valid_login(username, password):
+    if username== USERNAME and password==PASSWORD:
+        return True
+    else:
+        return False
+
 #after successful login the user is redirected to the news feed
+@app.route("/")
 @app.route('/home', methods=['GET'])
 def show_feed():
     #get data from dbms
-    render_template("home.html")
+    return render_template("index.html")
 
 #invoked while adding a new post
-@app.route('new', methods=['GET'])
+@app.route('/new', methods=['GET'])
 def new_post():
-    render_template('new_post.html')
+    return render_template('post.html')
+
+@app.route('/contact', methods=['GET'])
+def contact():
+    return render_template("contact.html")
+
+
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html")
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template("dashboard.html", username="suraj")
+
+@app.route("/post/<postid>")
+def show_post(postid=None):
+    if postid==None:
+        return render_template("404.html", 404)
     
-    
+    return render_template("show_post.html", postid=postid)
+
 if __name__=='__main__':
     app.run(debug=True)
