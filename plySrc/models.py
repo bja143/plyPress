@@ -64,11 +64,14 @@ def insert_post(post):
         
         cursor.execute("select max(post_id) from post_master")
         post_id = cursor.fetchone()+1
-        sql= "insert into post_master values ('%d', '%s', '%s', '%s','%s','%s')\
-           %(post_id, post['title'], post['subtitle'], post['text'], post['date'], post[username])"
+        sql= "insert into post_master values (?,?,?,?,?,?)\
+           [(post_id, post['title'], post['subtitle'], post['text'], post['date'], post['username'])]"
         cursor.execute(sql)
         cursor.commit()
     except:
         app.logger.error("Couldn't execute insert_posts")
-        
+    
+    if post_id is None:
+        return 0
+    
     return post_id

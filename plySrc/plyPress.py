@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, url_for, render_template, session, redirect
+from flask import Flask, request, url_for, render_template, session, redirect, flash
 from plySrc.models import fetch_posts, insert_post, fetch_post_by_id
 from plySrc import app
 from plySrc.config import PASSWORD, USERNAME, TITLE, secret_key
@@ -20,36 +20,28 @@ app.secret_key = secret_key
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    if request.method=='POST' and session['logged_in'] == False:
-        if valid_login(request.form['username'], request.form['password']):
-            session['logged_in'] = True
-            return render_template("dashboard.html")
+    if request.method == 'POST':
+        if request.form['username'] != USERNAME:
+            error = 'Invalid username'
+        elif request.form['password'] != PASSWORD:
+            error = 'Invalid password'
         else:
-            error = 'Invalid credentials'
-            return render_template('dashboard.html', error=error)
-    elif session['logged_in']==True:
-        redirect(url_for(dashboard, 400))
-    else:
-        return render_template('login.html', title=TITLE)
+            session['logged_in'] = True
+            return redirect(url_for('dashboard'))
+    return render_template('login.html', error=error, title=TITLE)
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    session.pop(USERNAME)
-    session['logged_in'] = False
-    
-def valid_login(username, password):
-    if username== USERNAME and password==PASSWORD:
-        return True
-    else:
-        return False
+    if session.get('logged_in'):
+        session.pop('logged_in', None)
+        return render_template(url_for('show_feed'), 200)
     
 posts= [] # get all posts from db
 
 post_content={ }
 
 #after successful login the user is redirected to the news feed
-@app.route("/")
-@app.route('/home', methods=['GET'])
+@app.route('/', methods=['GET'])
 def show_feed():
     #get data from dbms
     posts = fetch_posts()
@@ -58,7 +50,7 @@ def show_feed():
 #invoked while adding a new post
 @app.route('/new', methods=['GET', 'POST'])
 def new_post():
-    if session['logged_in']==True:
+    if not session.get('logged_in'):
         
         if request.method=='GET':
             return render_template('post.html')
@@ -78,9 +70,9 @@ def new_post():
             
             insert_post(post)
             
-            render_template('post.html', post=post)
+        return render_template('post.html', post=post)
     else:
-        redirect(url_for(login, 403))
+        return redirect(url_for('login'))
         
 
 @app.route('/contact', methods=['GET'])
@@ -93,10 +85,10 @@ def about():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    if session['logged_in']==True:
-        return render_template("dashboard.html")
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     else:
-        redirect(url_for(login), 403)
+        return render_template("dashboard.html")
 
 @app.route('/post/<postid>')
 def show_post(postid):
