@@ -1,3 +1,2 @@
 mysql-python
 Flask
-Flask-SQLAlchemy

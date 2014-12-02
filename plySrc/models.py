@@ -1,6 +1,11 @@
 import MySQLdb
+from _mysql import OperationalError
 
-db = MySQLdb.connect("localhost", "root", "", "plypress")
+try:
+    db = MySQLdb.connect("localhost", "root", "", "plypress")
+except OperationalError:
+    print "Please check your database server, it might be down."
+    
 cursor = db.cursor()
 
 

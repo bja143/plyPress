@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, url_for, render_template, session
-from config import *
-from models import fetch_posts, insert_post, fetch_post_by_id
+from plySrc.config import *
+from plySrc.models import fetch_posts, insert_post, fetch_post_by_id
+from plySrc import app
 
-#create the application
-app = Flask(__name__)
-app.config.from_object(__name__)
 
 #implement the installer later
 
@@ -89,8 +87,3 @@ def about():
 def show_post(postid):
     post_content = fetch_post_by_id(postid)
     return render_template("show_post.html",post=post_content)
-
-if __name__=='__main__':
-    app.run(debug=True)
-
-
