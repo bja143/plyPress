@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, url_for, render_template, session
-from plySrc.config import *
+
 from plySrc.models import fetch_posts, insert_post, fetch_post_by_id
 from plySrc import app
+from plySrc.config import PASSWORD, USERNAME, TITLE
 
 
 #implement the installer later

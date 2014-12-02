@@ -1,20 +1,33 @@
 import MySQLdb
 from _mysql import OperationalError
+from plySrc import app
 
 try:
     db = MySQLdb.connect("localhost", "root", "", "plypress")
 except OperationalError:
-    print "Please check your database server, it might be down."
-    
-cursor = db.cursor()
+    app.logger.error("Database server might be down")
+finally:
+    app.logger.debug("database connection established")
+
+try:
+    cursor = db.cursor()
+    app.logger.debug("cursor fetched")
+except:
+    app.logger.error("cursor object not fetched")
 
 
 def disconnect():
-    db.close()
+    try:
+        db.close()
+    except:
+        app.logger.error("couldn't tear down db connection")
 
 def fetch_posts():
-    cursor.execute('select * from post_master')
-    data = cursor.fetchall()
+    try:
+        cursor.execute('select * from post_master')
+        data = cursor.fetchall()
+    except:
+        app.logger.error("Couldn't execute fetch_posts")
     posts = []
     
     if posts == None:
@@ -30,8 +43,13 @@ def fetch_posts():
     return posts
 
 def fetch_post_by_id(id):
-    cursor.execute("select * from post_master where post_id='%d'" % (id))
-    data = cursor.fetchone()
+    try:
+        
+        cursor.execute("select * from post_master where post_id='%d'" % (id))
+        data = cursor.fetchone()
+    except:
+        app.logger.error("Couldn't execute fetch_posts")
+
     post = {
            'title':data[1],
            'subtitle':data[2],
@@ -42,12 +60,15 @@ def fetch_post_by_id(id):
     return post
     
 def insert_post(post):
-    cursor.execute("select max(post_id) from post_master")
-    post_id = cursor.fetchone()+1
-    sql= "insert into post_master values ('%d', '%s', '%s', '%s','%s','%s')\
-       %(post_id, post['title'], post['subtitle'], post['text'], post['date'], post[username])"
-    
-    cursor.execute(sql)
-    cursor.commit
+    try:
+        
+        cursor.execute("select max(post_id) from post_master")
+        post_id = cursor.fetchone()+1
+        sql= "insert into post_master values ('%d', '%s', '%s', '%s','%s','%s')\
+           %(post_id, post['title'], post['subtitle'], post['text'], post['date'], post[username])"
+        cursor.execute(sql)
+        cursor.commit()
+    except:
+        app.logger.error("Couldn't execute insert_posts")
+        
     return post_id
-    
