@@ -6,6 +6,7 @@ try:
     db = MySQLdb.connect("localhost", "root", "", "plypress")
 except OperationalError:
     app.logger.error("Database server might be down")
+    exit()
 finally:
     app.logger.debug("database connection established")
 
