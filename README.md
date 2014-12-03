@@ -13,3 +13,5 @@ There are no other dependencies.
 + execute  `git clone https://github.com/thewhitetulip/plyPress.git`
 
 +  open terminal and `cd` to the cloned folder and execute `python runserver.py`
+
+*Note* PlyPress is still under development! It will soon be released.
