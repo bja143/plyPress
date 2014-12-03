@@ -6,3 +6,4 @@ secret_key= 'developmentkey'
 USERNAME = 'admin'
 PASSWORD = 'admin'
 TITLE='MyTechbook'
+script_root="/home/googolplex/workspace_python/plyPress"
