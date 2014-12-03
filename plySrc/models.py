@@ -37,10 +37,9 @@ def fetch_posts():
         for i in data:
             posts.append({
                           'title':i[1],
-                          'subtitle':i[2],
-                          'date':i[4],
-                          'username':i[5],
-                          'text':i[3]})
+                          'date':i[3],
+                          'username':i[4],
+                          'text':i[2]})
     return posts
 
 def fetch_post_by_id(id):
@@ -53,10 +52,9 @@ def fetch_post_by_id(id):
 
     post = {
            'title':data[1],
-           'subtitle':data[2],
-           'date':data[4],
-           'username':data[5],
-           'text':data[3]
+           'date':data[3],
+           'username':data[4],
+           'text':data[2]
            }
     return post
     
@@ -65,8 +63,8 @@ def insert_post(post):
         
         cursor.execute("select max(post_id) from post_master")
         post_id = cursor.fetchone()+1
-        sql= "insert into post_master values (?,?,?,?,?,?)\
-           [(post_id, post['title'], post['subtitle'], post['text'], post['date'], post['username'])]"
+        sql= "insert into post_master values (?,?,?,?,?)\
+           [(post_id, post['title'], post['text'], post['date'], post['username'])]"
         cursor.execute(sql)
         cursor.commit()
     except:
