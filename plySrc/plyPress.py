@@ -50,30 +50,24 @@ def show_feed():
 #invoked while adding a new post
 @app.route('/new', methods=['GET', 'POST'])
 def new_post():
-    if not session.get('logged_in'):
-        
-        if request.method=='GET':
-            return render_template('post.html')
-        else:
-            title= request.form['title']
-            subtitle= request.form['subtitle']
-            text= request.form['text']
-            username = USERNAME
-            from datetime import date
-            to = date.today()
-            date=to.strftime("%B %d %Y")
-            
-            post = {
-                    'title':title, 'subtitle':subtitle, 'text':text,
-                    'date':date, 'username':username              
-                    }
-            
-            insert_post(post)
-            
-        return render_template('post.html', post=post)
+    if request.method=='GET':
+        return render_template('post.html')
     else:
-        return redirect(url_for('login'))
+        title= request.form['title']
+        text= request.form['text']
+        username = USERNAME
+        from datetime import date
+        to = date.today()
+        date=to.strftime("%B %d %Y")
         
+        post = {
+                'title':title, 'text':text,
+                'date':date, 'username':username              
+                }
+        
+        insert_post(post)
+        
+        render_template('post.html', post=post)
 
 @app.route('/contact', methods=['GET'])
 def contact():
