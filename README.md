@@ -18,6 +18,7 @@ There are no other dependencies.
 **Steps to contribute or tinker with the source code**
 + If you are using PyDev go to `File -> Import -> Existing project -> [path_to_plyPress]`.
 + To contribute please raise an issue and submit a pull request.
++ Development is done on the `develop` branch
  
 **Coding Conventions**
 + Name the variables and function names properly to reflect what the variable or function stands for
