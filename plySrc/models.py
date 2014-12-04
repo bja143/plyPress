@@ -62,10 +62,12 @@ def insert_post(post):
     try:
         
         cursor.execute("select max(post_id) from post_master")
-        post_id = cursor.fetchone()+1
-        sql= "insert into post_master values (?,?,?,?,?)\
-           [(post_id, post['title'], post['text'], post['date'], post['username'])]"
-        cursor.execute(sql)
+        fetched = cursor.fetchone()
+        if fetched is None:
+            post_id=0
+        else:
+            post_id = fetched+1
+        cursor.execute('insert into post_master(post_id,post_title,post_content,posted_on,post_author,post_url) values (%s,%s,%s,%s,%s,%s)',[ post_id, post['title'], post['text'], post['date'], post['username'], post['url']])
         cursor.commit()
     except:
         app.logger.error("Couldn't execute insert_posts")
